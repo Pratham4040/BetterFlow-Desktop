@@ -1,0 +1,21 @@
+# BetterFlow Desktop — Python dependencies
+# Install with: pip install -r requirements.txt
+#
+# Python 3.10+ required.
+
+# Speech recognition (fully offline, free, unlimited)
+faster-whisper==1.0.3
+
+# Audio capture
+sounddevice==0.4.7
+numpy>=1.24,<2.0
+
+# Global hotkeys + text injection
+pynput==1.7.6
+
+# System tray icon
+pystray==0.19.5
+Pillow>=10.0.0
+
+# (tkinter is part of standard Python on Windows and macOS.
+#  On Linux, install with: sudo apt install python3-tk)

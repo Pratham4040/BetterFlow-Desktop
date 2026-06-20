@@ -1,0 +1,54 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Large binary files (models, DLLs, compiled extensions)
+*.dll
+*.pyd
+*.onnx
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Whisper / HuggingFace model cache
+models/
+*.model
+huggingface/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# User config (contains personal settings)
+config.json
+
+# Byte-compiled
+*.pyo
+
+# Distribution
+*.whl
+*.tar.gz

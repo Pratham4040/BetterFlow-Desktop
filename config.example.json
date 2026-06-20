@@ -1,0 +1,19 @@
+{
+  "hotkey": "ctrl+shift+space",
+  "model_size": "base",
+  "language": null,
+  "device": "cpu",
+  "compute_type": "int8",
+  "silence_timeout_sec": 2.0,
+  "max_recording_sec": 60,
+  "sample_rate": 16000,
+  "auto_punctuate": true,
+  "type_speed_delay": 0.0,
+  "show_overlay": true,
+  "play_sounds": true,
+  "start_with_system": false,
+  "_comment_hotkey": "Use 'cmd+shift+space' on macOS, 'ctrl+shift+space' on Windows/Linux. Other keys: 'alt+space', 'f8', etc.",
+  "_comment_model": "Sizes: tiny (fast, lower accuracy) | base (recommended) | small (better) | medium (much better, slow) | large-v3 (best, very slow on CPU)",
+  "_comment_language": "null = auto-detect. Set to 'en', 'hi', 'es', 'fr', 'de', 'zh', 'ja', etc. for better accuracy.",
+  "_comment_device": "'cpu' works everywhere. Use 'cuda' if you have an NVIDIA GPU (much faster)."
+}
