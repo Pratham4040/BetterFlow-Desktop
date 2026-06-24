@@ -7,7 +7,8 @@ A cozy desktop app with a floating animated icon. Press a hotkey or click the ic
 100% free. 100% offline. 100% unlimited. Your audio never leaves your computer.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
+![Platform](https://img.shields.io/badge/Platform-Windows%20(tested)-brightgreen)
+![Platform](https://img.shields.io/badge/macOS%20%7C%20Linux-community%20tested-yellow)
 
 ---
 
@@ -42,7 +43,18 @@ The floating icon animates to show state:
 - **Python 3.10+** — https://www.python.org/downloads/
 - **~200 MB disk** — for the Whisper model (downloads on first run)
 - **A microphone**
-- **OS**: Windows 10+, macOS 11+, or Linux (Ubuntu 22.04+)
+- **OS**: Windows 10+ (fully tested), macOS 11+ and Linux (community tested — may need tweaks)
+
+### Platform Support
+
+| Platform | Status | Notes |
+|----------|--------|-------|
+| **Windows 10/11** | ✅ Fully tested | Works out of the box |
+| **macOS** | ⚠️ Community tested | Needs Accessibility permission for hotkeys. Floating icon may behave differently. |
+| **Linux (X11)** | ⚠️ Community tested | Requires X11 (Wayland not supported for global hotkeys). Transparent background won't work. |
+| **Linux (Wayland)** | ❌ Not supported | pynput can't capture global hotkeys on Wayland |
+
+> **We develop on Windows.** macOS/Linux help welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
