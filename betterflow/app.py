@@ -2,8 +2,6 @@
 Main application — ties all components together.
 """
 
-import os
-import sys
 import time
 import threading
 
@@ -71,9 +69,18 @@ class BetterFlowApp:
         )
 
     def _on_settings_saved(self, new_cfg):
-        log.info("Restarting with new config...")
-        self._quit()
-        os.execv(sys.executable, [sys.executable] + sys.argv)
+        log.info("Settings saved. Reloading config and model...")
+        # Reload config
+        self.cfg = new_cfg
+        self.engine.cfg = new_cfg
+        # Update hotkey
+        self.target_keys = parse_hotkey(new_cfg["hotkey"])
+        # Clear whisper cache so it reloads with new model on next use
+        from betterflow.whisper_engine import reload_model
+        reload_model()
+        # Pre-load new model in background
+        threading.Thread(target=lambda: get_whisper_model(new_cfg), daemon=True).start()
+        log.info(f"Now using model: {new_cfg['model_size']} on {new_cfg['device']}")
 
     def _test_type(self):
         def _do():

@@ -58,6 +58,17 @@ class DictationEngine:
     def _start(self):
         """Begin recording from the microphone."""
         try:
+            # Check if model is still downloading
+            from betterflow.whisper_engine import is_loading
+            if is_loading():
+                log.info("Model still downloading, please wait...")
+                self._set_state("transcribing")  # show spinning animation
+                # Wait for model to finish loading
+                while is_loading():
+                    time.sleep(0.5)
+                self._set_state("idle")
+                log.info("Model ready! Press hotkey again to start dictating.")
+                return
             if self.cfg.get("play_sounds", True):
                 beep(880, 0.1, 0.2)
             self.recorder.start()
