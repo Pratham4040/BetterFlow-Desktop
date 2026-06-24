@@ -20,16 +20,32 @@ class SettingsWindow:
 
         self.win = tk.Toplevel(parent_root) if parent_root else tk.Tk()
         self.win.title(f"{APP_NAME} — Settings")
-        self.win.geometry("480x620")
+        self.win.geometry("480x700")
         self.win.configure(bg=COLORS["bg_dark"])
-        self.win.resizable(False, False)
+        self.win.resizable(False, True)
         try:
             self.win.attributes("-topmost", True)
         except Exception:
             pass
 
-        main = tk.Frame(self.win, bg=COLORS["bg_dark"], padx=24, pady=16)
-        main.pack(fill="both", expand=True)
+        # Scrollable container
+        canvas = tk.Canvas(self.win, bg=COLORS["bg_dark"], highlightthickness=0)
+        scrollbar = tk.Scrollbar(self.win, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+
+        main = tk.Frame(canvas, bg=COLORS["bg_dark"], padx=24, pady=16)
+        canvas.create_window((0, 0), window=main, anchor="nw")
+
+        def _on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+        main.bind("<Configure>", _on_frame_configure)
+
+        # Mouse wheel scrolling
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
         # Title
         tk.Label(
