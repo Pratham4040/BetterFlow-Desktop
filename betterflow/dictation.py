@@ -86,17 +86,17 @@ class DictationEngine:
         Periodically transcribe the last ~2.5s of audio to detect
         a voice stop command like 'stop listening'.
         """
-        time.sleep(1.0)
+        time.sleep(0.5)
         model = get_whisper_model(self.cfg)
         while self.is_recording:
-            time.sleep(0.8)
+            time.sleep(0.5)
             if not self.is_recording:
                 return
-            # Grab the last ~2.5 seconds (each frame = 1024 samples @ 16kHz ≈ 64ms)
+            # Grab the last ~3 seconds (each frame = 1024 samples @ 16kHz ≈ 64ms)
             with self.recorder._lock:
                 if not self.recorder.frames:
                     continue
-                recent = self.recorder.frames[-39:]
+                recent = self.recorder.frames[-47:]
             if not recent:
                 continue
             chunk = np.concatenate(recent, axis=0).flatten()
@@ -116,7 +116,8 @@ class DictationEngine:
                 if any(phrase in clean for phrase in STOP_PHRASES):
                     log.info(f"Voice command detected: '{tail_text}'")
                     self._stop_via_voice_command = True
-                    self.toggle()
+                    # Stop directly instead of going through toggle() to avoid lock/thread issues
+                    self._stop_and_transcribe()
                     return
             except Exception:
                 pass
