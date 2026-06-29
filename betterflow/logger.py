@@ -1,8 +1,7 @@
 """
-Logging setup — writes to file and stdout.
+Logging setup — writes to file only (terminal is for the dashboard).
 """
 
-import sys
 import logging
 
 from betterflow.config import CONFIG_DIR, LOG_FILE
@@ -16,15 +15,10 @@ def setup_logging() -> logging.Logger:
     if logger.handlers:
         return logger
 
-    # File handler
+    # File handler only — keep terminal clean for the dashboard
     fh = logging.FileHandler(LOG_FILE, encoding="utf-8")
     fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
     logger.addHandler(fh)
-
-    # Console handler
-    sh = logging.StreamHandler(sys.stdout)
-    sh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
-    logger.addHandler(sh)
 
     return logger
 

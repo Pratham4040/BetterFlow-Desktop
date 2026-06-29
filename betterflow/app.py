@@ -15,6 +15,7 @@ from betterflow.hotkey import parse_hotkey, normalize_key
 from betterflow.floating_icon import FloatingIcon
 from betterflow.settings_ui import SettingsWindow
 from betterflow.whisper_engine import get_whisper_model
+from betterflow.dashboard import print_dashboard, print_status
 
 
 class BetterFlowApp:
@@ -118,6 +119,9 @@ class BetterFlowApp:
 
     def run(self):
         """Start the app — this blocks until quit."""
+        # Show terminal dashboard
+        print_dashboard(self.cfg)
+
         log.info(f"{APP_NAME} {APP_VERSION} starting")
         log.info(f"Hotkey: {self.cfg['hotkey']}")
         log.info(f"Model: {self.cfg['model_size']} on {self.cfg['device']}")
