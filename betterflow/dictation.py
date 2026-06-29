@@ -13,6 +13,8 @@ from betterflow.audio import AudioRecorder, beep
 from betterflow.typer import Typer
 from betterflow.whisper_engine import get_whisper_model
 from betterflow.logger import log
+from betterflow.stats import record_dictation
+from betterflow.dashboard import print_dictation_result
 
 
 # Phrases that trigger voice-activated stop
@@ -156,6 +158,9 @@ class DictationEngine:
             self._set_state("idle")
             time.sleep(0.1)
             if text:
+                record_dictation(text)
+                duration = len(audio) / self.cfg["sample_rate"]
+                print_dictation_result(text, duration, time.time() - t0)
                 self.typer.type(text)
         except Exception as e:
             log.error(f"Transcription failed: {e}")

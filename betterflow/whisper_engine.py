@@ -2,9 +2,15 @@
 Whisper model loading — lazy-loaded and cached after first use.
 """
 
+import os
 import time
 import threading
 from betterflow.logger import log
+
+# Suppress noisy huggingface warnings in terminal
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Global cached model instance
 _WHISPER_MODEL = None
@@ -39,17 +45,18 @@ def get_whisper_model(cfg: dict):
         model_name = f"Systran/faster-whisper-{cfg['model_size']}"
         log.info(f"Downloading/loading Whisper model '{cfg['model_size']}'...")
 
-        # Download with progress visible in terminal
-        print(f"\n  📥 Downloading model: {model_name}")
-        print(f"     This only happens once per model.\n")
+        # Download silently (progress goes to log file, not terminal)
+        import logging as _logging
+        import warnings as _warnings
+        _logging.getLogger("huggingface_hub").setLevel(_logging.WARNING)
+        _warnings.filterwarnings("ignore", module="huggingface_hub")
+
+        from betterflow.dashboard import print_status
+        print_status(f"Loading model '{cfg['model_size']}'...", style="#ffd93d")
+
         try:
-            snapshot_download(
-                model_name,
-                local_dir=None,  # use default HF cache
-            )
-            print(f"  ✅ Download complete!\n")
+            snapshot_download(model_name, local_dir=None)
         except Exception:
-            # If snapshot_download fails, let WhisperModel handle it (it has its own download)
             pass
 
         log.info(f"Loading Whisper model '{cfg['model_size']}' on {cfg['device']}...")
@@ -62,6 +69,7 @@ def get_whisper_model(cfg: dict):
         _CURRENT_MODEL_SIZE = cfg["model_size"]
         _IS_LOADING = False
         log.info(f"Whisper '{cfg['model_size']}' loaded in {time.time() - t0:.1f}s")
+        print_status(f"Model '{cfg['model_size']}' ready ✓", style="#7bc47f")
         return _WHISPER_MODEL
 
 
